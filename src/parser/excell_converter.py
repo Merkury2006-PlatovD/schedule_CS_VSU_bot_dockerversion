@@ -18,6 +18,7 @@ class ScheduleParser:
 
     def __find_required_list(self):
         for sheet in self.wb:
+            print(sheet.title)
             if re.match(r'бак', sheet.title, re.IGNORECASE):
                 return sheet
         return self.wb.worksheets[0]
