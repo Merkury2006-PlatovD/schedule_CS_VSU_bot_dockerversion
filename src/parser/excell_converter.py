@@ -19,9 +19,9 @@ class ScheduleParser:
     def __find_required_list(self):
         for sheet in self.wb:
             print(sheet.title)
-            if re.match(r'бак', sheet.title, re.IGNORECASE):
+            if re.search(r'бак', sheet.title, re.IGNORECASE):
                 return sheet
-        return self.wb.worksheets[0]
+        raise NotFoundListError()
 
     def _get_merged_cell_value(self, cell):
         if isinstance(cell, MergedCell):
