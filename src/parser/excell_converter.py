@@ -20,7 +20,7 @@ class ScheduleParser:
         for sheet in self.wb:
             if re.match(r'бак', sheet.title, re.IGNORECASE):
                 return sheet
-        raise NotFoundListError()
+        return self.wb.worksheets[0]
 
     def _get_merged_cell_value(self, cell):
         if isinstance(cell, MergedCell):
