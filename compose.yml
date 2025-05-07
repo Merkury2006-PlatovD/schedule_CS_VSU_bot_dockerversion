@@ -1,0 +1,53 @@
+services:
+  adminer:
+    image: adminer
+    container_name: admin
+    networks:
+      - botnet
+    ports:
+      - "8080:8080"
+    links:
+      - postgres:db
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: psql
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - botnet
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=Europe/Moscow
+    env_file:
+      - .env
+
+  bot:
+    build: ./src
+    image: bot-image
+    container_name: bot
+    restart: always
+    command: "python Main.py"
+    env_file:
+      - .env
+    links:
+      - postgres:db
+    volumes:
+      - ./src:/app
+    networks:
+      - botnet
+    depends_on:
+      - postgres
+
+volumes:
+  db-data:
+  bot:
+
+networks:
+  botnet:
+    driver: bridge
+
